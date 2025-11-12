@@ -1,0 +1,24 @@
+{
+  "name": "show",
+  "version": "1.0.0",
+  "description": "1. Legge inn hva show de\r - ønsker å se\r - har sett\r - holder på å se\r 2. Få og gi anbefalinger til venner/andre brukere på show de burde se\r 3. Lar brukere legge inn bilder, enten for profilbilde eller for plakat til show.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muunuo/Show.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muunuo/Show/issues"
+  },
+  "homepage": "https://github.com/muunuo/Show#readme",
+  "dependencies": {
+    "better-sqlite3": "^12.4.1",
+    "express": "^5.1.0"
+  }
+}

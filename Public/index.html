@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <form id="opprett" method="POST" action="opprettKonto">
+        <label for="opprettBrukernavn">Brukernavn</label>
+        <input placeholder="Brukernavn" type="text" name="opprettBrukernavn" id="opprettBrukernavn">
+        <br>
+        <label for="opprettPassord">Passord</label>
+        <input placeholder="Passord" type="text" name="opprettPassord" id="opprettPassord">
+        <br>
+        <label for="navn">Navn</label>
+        <input placeholder="syneligt navn" type="text" name="navn" id="navn">
+        <br>
+        <button>Opprett</button>
+    </form>
+    <form id="loggInn" action="innlogget">
+        <label for="brukernavn">Brukernavn</label>
+        <input placeholder="Brukernavn" type="text" name="brukernavn" id="brukernavn">
+        <br>
+        <label for="passord">Passord</label>
+        <input placeholder="Passord" type="text" name="passord" id="passord">
+        <br>
+        <button id="loggInnKnapp">Logg Inn</button>
+    </form>
+</body>
+</html>

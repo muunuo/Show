@@ -1,0 +1,20 @@
+#loggInn {
+    background-color: lightblue;
+}
+
+body {
+    background-color: aquamarine;
+}
+
+#opprett {
+    background-color: lightcoral;
+    margin: 5rem;
+}
+/* 
+form {
+    display: flex;
+    align-items: center ;
+    justify-content: center;
+    flex-direction: column;
+    
+} */
