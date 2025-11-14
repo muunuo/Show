@@ -13,12 +13,14 @@ app.get("/", (req, res)=> {
 });
 
 app.post("/opprettKonto", (req, res)=> {
-    const {opprettBrukernavn, opprettPassord, navn} = req.body;
-
-    try { // fungerer ikke enda. Mangler å sette det inn i databasen.
+    const { opprettBrukernavn, opprettPassord, navn } = req.body;
+    
+    try {
+        console.log(opprettBrukernavn, opprettPassord, navn)
+        // db.exec("CREATE TABLE IF NOT EXISTS bruker (id INTEGER PRIMARY KEY, brukernavn TEXT, passord TEXT, navn TEXT)");
         const insert = db.prepare("INSERT INTO bruker (brukernavn, passord, navn) VALUES (?, ?, ?)");
         insert.run(opprettBrukernavn, opprettPassord, navn);
-        
+
         res.send("Konto opprettet!");
     } catch (error) {
         console.log(error);
@@ -26,37 +28,20 @@ app.post("/opprettKonto", (req, res)=> {
     }
 });
 
-app.get("/innlogget", (req, res)=> {
-    res.sendFile(__dirname + "/innlogget.html")
-});
+// app.get("/innlogget", (req, res)=> {
+//     const { brukernavn, passord } = req.body
 
-// app.post("/opprettKonto", (req, res)=> {
-//     const { navn, brukernavn, passord} = req.body
-
-//     db.query("SELECT brukernavn FROM bruker WHERE brukernavn = ?", [brukernavn], async (error), ress => {
-//         if (error) {
-//             console.log(error)
-//         }
-//     });
+//     try {
+//         const select = db.prepare("SELECT FROM bruker (brukernavn, passord) VALUES (?,?,?)");
+//         select.run(brukernavn, passord);
+//         res.sendFile(__dirname + "/innlogget.html");
+//     } catch (error) {
+//         console.log(error);
+//     }
+    
 // });
-
-
-
-
 
 // setter opp en port på serveren, og nå kjører den
 app.listen(3000, () => {
     console.log("server kjører i port http://localhost:3000")
 });
-
-// let loggInn = true
-// let innKnapp = document.getElementById("loggInnKnapp")
-// loggInnKnapp.addEventListener(click, "innKnapp")
-
-// function inn() {
-//     if (loggInn == true) {
-//         app.get("/", (req, res)=> {
-//         res.sendFile(__dirname + "/innlogget.html")
-//     });
-//     };
-// };

@@ -7,26 +7,26 @@
     <title>Document</title>
 </head>
 <body>
-    <form id="opprett" method="POST" action="opprettKonto">
+    <form id="opprett" method="POST" action="/opprettKonto">
         <label for="opprettBrukernavn">Brukernavn</label>
-        <input placeholder="Brukernavn" type="text" name="opprettBrukernavn" id="opprettBrukernavn">
+        <input placeholder="Brukernavn" type="text" name="opprettBrukernavn" id="opprettBrukernavn" required>
         <br>
         <label for="opprettPassord">Passord</label>
-        <input placeholder="Passord" type="text" name="opprettPassord" id="opprettPassord">
+        <input placeholder="Passord" type="password" name="opprettPassord" id="opprettPassord" required>
         <br>
         <label for="navn">Navn</label>
-        <input placeholder="syneligt navn" type="text" name="navn" id="navn">
+        <input placeholder="navn" type="text" name="navn" id="navn" required>
         <br>
-        <button>Opprett</button>
+        <button type="submit">Opprett Konto</button>
     </form>
-    <form id="loggInn" action="innlogget">
+    <form id="loggInn" method="POST" action="/innlogget">
         <label for="brukernavn">Brukernavn</label>
-        <input placeholder="Brukernavn" type="text" name="brukernavn" id="brukernavn">
+        <input placeholder="Brukernavn" type="text" name="brukernavn" id="brukernavn" required>
         <br>
         <label for="passord">Passord</label>
-        <input placeholder="Passord" type="text" name="passord" id="passord">
+        <input placeholder="Passord" type="text" name="passord" id="passord" required>
         <br>
-        <button id="loggInnKnapp">Logg Inn</button>
+        <button type="submit" >Logg Inn</button>
     </form>
 </body>
 </html>
