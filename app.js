@@ -12,6 +12,10 @@ app.get("/", (req, res)=> {
     res.sendFile(__dirname + "/public/index.html")
 });
 
+app.post("/innlogget", (req, res)=> {
+    res.sendFile(__dirname + "/innlogget.html");
+});
+
 app.post("/opprettKonto", (req, res)=> {
     const { opprettBrukernavn, opprettPassord, navn } = req.body;
     
@@ -38,7 +42,6 @@ app.post("/opprettKonto", (req, res)=> {
 //     } catch (error) {
 //         console.log(error);
 //     }
-    
 // });
 
 // setter opp en port på serveren, og nå kjører den

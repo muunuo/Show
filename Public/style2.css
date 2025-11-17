@@ -1,0 +1,34 @@
+.top {grid-area: top;}
+.show {grid-area: show;}
+.venn {grid-area: venn;}
+
+
+#grid {
+    width: auto;
+    height: auto;
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas: 
+    "top top top"
+    "show show show"
+    "venn venn venn";
+}
+
+#grid{
+    display: flex;
+    flex-direction: column;
+}
+
+#top {
+    background-color: rgb(154, 26, 92);
+}
+
+#show {
+    background-color: rgb(26, 154, 133);
+}
+
+#venn {
+    background-color: rgb(56, 26, 154);
+}
