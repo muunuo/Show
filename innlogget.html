@@ -14,13 +14,22 @@
         <p>bio</p>
         </div>
     <main>
-        <div id="show">
+        <div id="serie">
+            <form method="POST" action="/opprettSerie">
+                <label for="serieNavn">serie Navn</label>
+                <input placeholder="serie navn" type="text" name="navn" id="serieNavn">
+                <label for="serieBio">serie beskrivelse</label>
+                <input placeholder="serie bio" type="text" name="bio" id="serieBio">
+                <label for="seriePlakat">Bilde</label>
+                <input type="image" name="plakat" id="seriePlakat">
+                <button type="submit" >Opprett</button>
+            </form>
+        </div>
+        <div>
             <p>har sett</p>
             <form action="">
                 <input type="text" name="serie" id="serie"> <!-- koblet opp til serie tabellen -->
             </form>
-        </div>
-        <div>
             <p>skal se</p>
         </div>
         <div>
