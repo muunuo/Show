@@ -16,6 +16,7 @@ const app = express();
 const db = new Database("showDatabase.db"); // knytter databasen til dokumentet
 
 app.use(express.static("public")); // sier at den skal hente ting fra public, inkludert css
+app.use(express.static("beskyttet"));
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.json()); // Trengs for å parse JSON-data
 
@@ -40,17 +41,14 @@ app.get("/", (req, res)=> { // sender deg til index i public om du tar local hos
 });
 
 app.post("/innlogget", (req, res)=> { // sender deg til innlogget når du er innlogget
-    res.sendFile(__dirname + "/innlogget.html");
 
-    // const { brukernavn, passord } = req.body;
+    const { brukernavn} = req.body;
     
-    // const bruker = db.prepare("SELECT * FROM person WHERE brukernavn = ?").get(brukernavn)
-    // if (!bruker) {
-    //     return res.status(401).json({ message: "feil ved brukernavn eller passord"});
-    // }
-
-    // req.session.bruker = { id: bruker.id, passord: bruker.passord, brukernavn: bruker.brukernavn };
-    // res.json({ message: "innlogging vellykket", redirect: "/innlogget" });
+    const bruker = db.prepare("SELECT * FROM bruker WHERE brukernavn = ?").get(brukernavn)
+    if (!bruker) {
+        return res.status(401).json({ message: "feil ved brukernavn eller passord"});
+    }
+    res.sendFile(__dirname + "/beskyttet/innlogget.html");
 });
 
 app.post("/opprettKonto", (req, res)=> { // oppretter en bruker konto og legger den til i databasen
@@ -88,6 +86,12 @@ app.get("/serie", (req, res) => {
     const serieListe = db.prepare("SELECT * FROM serie").all();
     res.json(serieListe);
     console.log(serieListe)
+});
+
+app.get("/bruker", (req, res) => {
+    const brukerListe = db.prepare("SELECT * FROM bruker").all();
+    res.json(brukerListe);
+    console.log(brukerListe)
 });
 
 
