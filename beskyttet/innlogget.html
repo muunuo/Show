@@ -8,33 +8,36 @@
     <script src="/brukerInfo.js"></script>
 </head>
 <body>
-    <div id="grid">
-        <div id="visBruker"></div>
+    <div id="grid"> <!-- css grid -->
+        <div id="visBrukere"><!-- fylles av js --></div>
+        
     <main>
-        <div id="serie">
+        
+        <div id="serie"> <!-- registrere en ny serie -->
+            <h2>Registrer serie</h2>
             <form method="POST" action="/opprettSerie">
-                <label for="serieNavn">serie Navn</label>
-                <input placeholder="serie navn" type="text" name="navn" id="serieNavn">
-                <label for="serieBio">serie beskrivelse</label>
-                <input placeholder="serie bio" type="text" name="bio" id="serieBio">
-                <label for="seriePlakat">Bilde</label>
-                <input type="image" name="plakat" id="seriePlakat">
-                <button type="submit" >Opprett</button>
+                <label for="serieNavn">Tittel</label>
+                <input placeholder="serie navn" type="text" name="serieNavn" id="serieNavn">
+                <br>
+                <label for="serieBio">Beskrivelse</label>
+                <input placeholder="serie bio" type="text" name="serieBio" id="serieBio">
+                <br>
+                <label for="seriePlakat">Bilde (URL)</label>
+                <input placeholder="plakat url" type="text" name="seriePlakat" id="seriePlakat">
+                <br>
+                <button type="submit">Opprett</button>
             </form>
         </div>
         <div>
-            <p>har sett</p>
-            <form action="">
-                <input type="text" name="serie" id="serie"> <!-- koblet opp til serie tabellen -->
-            </form>
-            <p>skal se</p>
+            <h2>har sett</h2>
+            <h2>skal se</h2>
         </div>
         <div>
-            anbefalt av andre
+            <h2>anbefalt</h2>
         </div>
 
         <div id="venn">
-            <p>Venner</p>
+            <h2>Venner</h2>
         </div>
     </main>
 

@@ -1,26 +1,48 @@
 async function henteSerie() {
-    const res = await fetch('/serie')
-    const data = await res.json();
+    const res = await fetch('/serie'); //venter til den får infoen fra /serie
+    const data = await res.json(); //venter til den får svar fra json
 
-    console.log(data)
+    // console.log(data);
 
-    for (let serie of data) {
-        console.log(serie.navn);
+    for (const serie of data) { //for hver ting innenfor data, opprettes en serie variable.
+        // console.log(serie.navn);
+
+        const serieDiv = document.createElement('div');
+        serieDiv.classList.add('serieKonteiner')
 
         // Ved å dele opp creat elementene så kan jeg gi de forskjellig utsener.
-        const serieNavn = document.createElement('h3');
-        serieNavn.innerText = serie.navn;
+        const h3 = document.createElement('h3');
+        h3.innerContent = `${serie.navn} (${serie.aar})`;
+        serieDiv.appendChild(h3);
 
-        const seriePlakat = document.createElement('img');
-        seriePlakat.src = serie.plakat;
-        seriePlakat.style.maxWidth='150px';
+        if (serie.plakat) {
+            const link = document.createElement('a');
+            link.herf = `serie.html?id${serie.id}`;
 
-        const serieBio = document.createElement('p');
-        serieBio.innerText = serie.bio;
+            const bilde = document.createElement('img');
+            bilde.src = "/plakat/" + serie.plakat
+            bilde.alt = serie.navn
+            bilde.style.cursor = 'pointer';
+            bilde.style.width = '150px'
 
-        serieBio.style.display  = 'none' //styling element må stå med det de styler hvis det er en create element
 
-        document.querySelector('#serie').append(serieNavn, seriePlakat, serieBio);
+            link.appendChild(bilde);
+            serieDiv.appendChild(link);
+            
+        }
+
+        document.querySelector('#serie').appendChild(serieDiv);
+
+        // const seriePlakat = document.createElement('img');
+        // seriePlakat.src = serie.plakat;
+        // seriePlakat.style.maxWidth='150px';
+
+        // const serieBio = document.createElement('p');
+        // serieBio.innerText = serie.bio;
+
+        // serieBio.style.display  = 'none' //styling element må stå med det de styler hvis det er en create element
+
+        // document.querySelector('#serie').append(serieNavn, seriePlakat, serieBio);
     }
 }
 

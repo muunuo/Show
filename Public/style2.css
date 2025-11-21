@@ -1,4 +1,4 @@
-.top {grid-area: top;}
+.visBrukere {grid-area: visBrukere;}
 .show {grid-area: show;}
 .venn {grid-area: venn;}
 
@@ -11,7 +11,7 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-template-areas: 
-    "top top top"
+    "visBrukere visBrukere visBrukere"
     "show show show"
     "venn venn venn";
 }
@@ -21,14 +21,19 @@
     flex-direction: column;
 }
 
-#top {
+#visBrukere {
     background-color: rgb(154, 26, 92);
+    padding: 1rem;
+    /* display: flex;
+    flex-direction: column; */
 }
 
-#show {
+#serie {
     background-color: rgb(26, 154, 133);
 }
 
 #venn {
     background-color: rgb(56, 26, 154);
+    padding: 1rem;
 }
+
