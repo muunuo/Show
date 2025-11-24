@@ -1,34 +1,36 @@
-async function henteSerie() {
-    const res = await fetch('/serie'); //venter til den får infoen fra /serie
-    const data = await res.json(); //venter til den får svar fra json
+async function henteAlleSerier() {
+    const res = await fetch('/alleSerier'); //venter til den får infoen fra /serie
+    const serieData = await res.json(); //venter til den får svar fra json
 
     // console.log(data);
 
-    for (const serie of data) { //for hver ting innenfor data, opprettes en serie variable.
+    for (const serie of serieData) { //for hver ting innenfor data, opprettes en serie variable.
         // console.log(serie.navn);
 
         const serieDiv = document.createElement('div');
-        serieDiv.classList.add('serieKonteiner')
+        serieDiv.classList.add('serieKonteiner');
 
         // Ved å dele opp creat elementene så kan jeg gi de forskjellig utsener.
         const h3 = document.createElement('h3');
-        h3.innerContent = `${serie.navn} (${serie.aar})`;
+        h3.textContent = `${serie.navn}`;
         serieDiv.appendChild(h3);
+
+        const p = document.createElement('p');
+        p.textContent = `${serie.bio}`;
+        serieDiv.appendChild(p);
 
         if (serie.plakat) {
             const link = document.createElement('a');
             link.herf = `serie.html?id${serie.id}`;
-
             const bilde = document.createElement('img');
-            bilde.src = "/plakat/" + serie.plakat
-            bilde.alt = serie.navn
+            bilde.src = serie.plakat // bruker kan legge inn en link som jeg gjør om til bilde. 
+            // bilde.src = "/plakat/" + serie.plakat; //her måtte jeg allerede ha bilde
+            bilde.alt = serie.navn;
             bilde.style.cursor = 'pointer';
-            bilde.style.width = '150px'
-
+            bilde.style.width = '150px';
 
             link.appendChild(bilde);
             serieDiv.appendChild(link);
-            
         }
 
         document.querySelector('#serie').appendChild(serieDiv);
@@ -46,7 +48,7 @@ async function henteSerie() {
     }
 }
 
-henteSerie();
+henteAlleSerier();
 
 // Plan
 // 1. Bio ikke syneligt

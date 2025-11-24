@@ -98,7 +98,7 @@ app.post("/opprettSerie", (req, res)=> { // oppretter en bruker konto og legger 
     }
 });
 
-app.get("/serie", (req, res) => {
+app.get("/alleSerier", (req, res) => {
     const serieListe = db.prepare("SELECT * FROM serie").all();
     res.json(serieListe);
     console.log(serieListe)
