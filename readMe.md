@@ -1,17 +1,23 @@
-# Show Traker nettside
+# Serie nettside
 
+## Prosjekt
+
+````
 Takk til følgende folk for ekstra hjelp:
 Jo Bjørnar
 Felix
 Tim
 Alex
 Andre i klassen som sitter rundt meg
+````
 
 mangler:
 * vidio
 * bilde av SQL fil
 * størelse på bildene
 
+
+bruker kan nå legge inn sine egene bilder som brukes for seriene. 
 
 ## Database
 

@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/style2.css">
-    <script src="/brukerInfo.js"></script>
+    <script src="/brukerInfo.js" defer></script>
 </head>
+<!-- Hjemmesiden for inlogget brukere. -->
 <body>
     <div id="grid"> <!-- css grid -->
-        <div id="visBrukere"><!-- fylles av js --></div>
-        
-    <main>
-        
-        <div id="serie"> <!-- registrere en ny serie -->
+        <div id="visBrukere"><!-- fylles av brukerInfo.js --></div>
+
+        <div id="serie"> <!-- bruker registrerer en ny serie -->
             <h2>Registrer serie</h2>
-            <form method="POST" action="/opprettSerie">
+            <form method="POST" action="/opprettSerie"> <!-- koblet til app.js -->
                 <label for="serieNavn">Tittel</label>
                 <input placeholder="serie navn" type="text" name="serieNavn" id="serieNavn">
                 <br>
@@ -28,18 +27,31 @@
                 <button type="submit">Opprett</button>
             </form>
         </div>
-        <div>
+
+        <div id="harSett">
             <h2>har sett</h2>
+            <!-- Skal bli fylt ut av js -->
+            </div>
+
+        <div id="skalSe">
             <h2>skal se</h2>
+            <!-- skal fylles ut av JS -->
         </div>
-        <div>
+
+        <div id="vilSe">
+            <h2>vil se</h2>
+            <!-- skal fylles ut av JS -->
+        </div>
+
+        <div id="anbefalt">
             <h2>anbefalt</h2>
+            <!-- skal fylles ut av JS -->
         </div>
 
         <div id="venn">
             <h2>Venner</h2>
+            <!-- skal fylles ut av JS -->
         </div>
-    </main>
 
     </div>
     

@@ -1,112 +1,126 @@
-// Server-bit: Setter opp en express-app
-const express = require("express");
-// const session = require("express-session");
-const Database = require("better-sqlite3");
-const cors = require("cors"); //for at henting av serier skal fungere i serie.js
+/*  
+NESTE MÅL
 
-const app = express();
+Hente ut anbefalinger fra databasen.
 
-// const corsOptions = {
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true
-// }
+PLAN:
+harkode inn anbefalinger
+Vise alle anbefalinger
+Vise kun en person sine anbefalinger med hardkode
+Bruke lignende kode som den for å hente brukernavn til å hente anbefalingene.
+*/
 
-const db = new Database("showDatabase.db"); // knytter databasen til dokumentet
+/*
+-------------------------------
+    OPPSETT
+-------------------------------
+*/
+// Server-delen: Setter opp en express-app
+const express = require('express');
+const Database = require('better-sqlite3');
 
-app.use(express.static("public")); // sier at den skal hente ting fra public, inkludert css
-app.use(express.static("beskyttet"));
-app.use(express.urlencoded({ extended: true }));
-// app.use(express.json()); // Trengs for å parse JSON-data
+const app = express(); //express henter ting?
 
-// app.use(
-//     session({
-//         secret: "hemmeligNokkel", // bytter til en sikker nøkkel
-//         resave: false,
-//         saveUninitialized: false,
-//         cookie: { secure: false} //true hvis du bruker HTTPS
-//     })
-// );
+const db = new Database('showDatabase.db'); // knytter databasen til dokumentet
 
-// function krevInnlogging(req, res, next) {
-//     if (!req.session.bruker) {
-//         return res.redirect("/index.html");
-//     }
-//     next();
-// }
+app.use(express.static('public')); // sier at den skal hente ting fra public, inkludert css
+app.use(express.static('beskyttet')); //sier de kan hente fra beskyttet (må endres om beskyttet noen gang blir beskyttet)
+app.use(express.urlencoded({ extended: true })); //lar oss hente ting fra søkebaren
 
-app.get("/", (req, res)=> { // sender deg til index i public om du tar local hoste
-    res.sendFile(__dirname + "/public/index.html")
+app.get('/', (req, res)=> { // sender deg til index i public om du ikke søker en bestemt sti
+    res.sendFile(__dirname + '/public/index.html')
 });
 
-app.post("/innlogget", (req, res)=> { // sender deg til innlogget når du er innlogget
 
-    const {brukernavn, passord} = req.body;
+db.exec(
+'CREATE TABLE IF NOT EXISTS anbefaling (idA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, serieID INTEGER, motakerID INTEGER, senderID INTEGER, kommentar INTEGER, CONSTRAINT anbefaling FOREIGN KEY (serieID) REFERENCES serie (idS), CONSTRAINT anbefaling FOREIGN KEY (motakerID) REFERENCES bruker (id), CONSTRAINT anbefaling FOREIGN KEY (senderID) REFERENCES bruker (id))' )
+db.exec( 'CREATE TABLE IF NOT EXISTS bruker (id INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, brukernavn TEXT, passord TEXT, profilbilde BLOB, bio TEXT)' )
+db.exec( 'CREATE TABLE IF NOT EXISTS serie (idS INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, bio TEXT, ar INTEGER, plakat TEXT, stjerner INTEGER)' )
+db.exec( 'CREATE TABLE IF NOT EXISTS serieStatus (serieStatusID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, idS INTEGER REFERENCES serie (idS), idB INTEGER REFERENCES bruker (id), status)' )
+
+/*
+-------------------------------
+    BRUKERE
+-------------------------------
+*/
+
+app.post('/innlogget', (req, res)=> { // Lar deg logge inn
+
+    const {brukernavn, passord} = req.body; //henter brukernavn og passord fra body
     
-    const bruker = db.prepare("SELECT * FROM bruker WHERE brukernavn = ? AND passord = ?").get(brukernavn, passord);
-    // console.log(bruker.id);
-    if (!bruker) {
+    const bruker = db.prepare('SELECT * FROM bruker WHERE brukernavn = ? AND passord = ?').get(brukernavn, passord);//henter alle brukernavn og passord
+    if (!bruker) { //hvis noe mangler får du failmelding
         return res.status(401).json({ message: "feil ved brukernavn eller passord"});
     }
-    // link.href = `beskyttet/innlogget.html?id=${bruker.id}`
-    res.redirect(`/innlogget.html?id=${bruker.id}`);
+    res.redirect(`/innlogget.html?id=${bruker.id}`); //hvis det fungerer får du få videre
 });
 
-app.get("/bruker/:id", (req, res) => {
+app.get('/bruker/:id', (req, res) => { //Vise frem brukernavn når innlogget
     const id = req.params.id;
-    const brukerInfo = db.prepare("SELECT id, brukernavn, navn FROM bruker WHERE id = ?").get(id);
-    if (!brukerInfo) return res.status(404).json({ message: "bruker ikke funnet" });
+    const brukerInfo = db.prepare('SELECT id, brukernavn, navn FROM bruker WHERE id = ?').get(id); //Henter ut info fra bruker med x id.
+    if (!brukerInfo) return res.status(404).json({ message: "bruker ikke funnet" }); //hvis noe mangler: Feilmelding
     res.json(brukerInfo);
 });
 
-// app.get("/bruker/:id", (req, res) => {
-//     const id = req.params.id;
-//     const brukerInfo = db.prepare("SELECT * FROM bruker WHERE id = ?").get(id);
-//     // res.json(brukerInfo);
-//     console.log(brukerInfo);
-// });
-
-
-app.post("/opprettKonto", (req, res)=> { // oppretter en bruker konto og legger den til i databasen
+app.post('/opprettKonto', (req, res)=> { // Oppretter ny brukerkonto
     const { opprettBrukernavn, opprettPassord, navn } = req.body;
     
-    try {
-        console.log(opprettBrukernavn, opprettPassord, navn)
-        // db.exec("CREATE TABLE IF NOT EXISTS bruker (id INTEGER PRIMARY KEY, brukernavn TEXT, passord TEXT, navn TEXT)");
-        const insert = db.prepare("INSERT INTO bruker (brukernavn, passord, navn) VALUES (?, ?, ?)");
-        insert.run(opprettBrukernavn, opprettPassord, navn);
-
+    try {//ser om den kan gjøre følgende
+        const insert = db.prepare('INSERT INTO bruker (brukernavn, passord, navn) VALUES (?, ?, ?)'); //sier hvor det skal settes inn
+        insert.run(opprettBrukernavn, opprettPassord, navn);//sier det skal settes inn
         res.send("Konto opprettet!");
-    } catch (error) {
-        console.log(error);
+
+    } catch (error) { //hvis den ikke klarte å gjøre det så gjør den følgende
+        console.log(error);//Error: viser frem feilmeldinger
         res.send("Feil ved opprettelse");
     }
 });
 
-app.post("/opprettSerie", (req, res)=> { // oppretter en bruker konto og legger den til i databasen
+/*
+-------------------------------
+    SERIE
+-------------------------------
+*/
+app.post('/opprettSerie', (req, res)=> { // oppretter en serie
     const { serieNavn, serieBio, seriePlakat } = req.body;
 
     try {
         console.log(serieNavn, serieBio, seriePlakat)
-        const insert = db.prepare("INSERT INTO serie (navn, bio, plakat) VALUES (?, ?, ?)");
+        const insert = db.prepare('INSERT INTO serie (navn, bio, plakat) VALUES (?, ?, ?)');
         insert.run(serieNavn, serieBio, seriePlakat);
-        console.log("serie opprettet");
     } catch (error) {
         console.log(error);
-        res.send("serie ved opprettelse");
+        res.send("serie ved opprettelse"); //sender meldingen om catch eller try blir trigget
     }
 });
 
-app.get("/alleSerier", (req, res) => {
-    const serieListe = db.prepare("SELECT * FROM serie").all();
+app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
+    const serieListe = db.prepare('SELECT * FROM serie').all();
     res.json(serieListe);
-    console.log(serieListe)
+});
+
+app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier (snart)
+    const motakerID = req.params.id;
+    // console.log(anbefalt.motakerID)
+    // const mottatAnbefaling = db.prepare(`
+    //     SELECT anbefaling.*, serie.navn, serie.bio, serie.plakat
+    //     FROM anbefaling
+    //     INNER JOIN serie ON anbefaling.serieID = serie.idS
+    //     WHERE anbefaling.motakerID = ?
+    //     `).all(motakerID);
+    const mottatAnbefaling = db.prepare('SELECT * FROM anbefaling WHERE motakerID = ?').all(motakerID);
+    if (!mottatAnbefaling) return res.status(404).json({ message: "bruker ikke funnet" });
+    res.json(mottatAnbefaling);
 });
 
 
+/*
+-------------------------------
+    ANNET
+-------------------------------
+*/
 
 // setter opp en port på serveren, og nå kjører den
 app.listen(3000, () => { // sier hvor serveren skal kjøre
-    console.log("server kjører i port http://localhost:3000")
+    console.log('server kjører i port http://localhost:3000')
 });
