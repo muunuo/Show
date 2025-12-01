@@ -99,21 +99,20 @@ app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
     res.json(serieListe);
 });
 
-app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier (snart)
+app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     const motakerID = req.params.id;
-    // console.log(anbefalt.motakerID)
-    // const mottatAnbefaling = db.prepare(`
-    //     SELECT anbefaling.*, serie.navn, serie.bio, serie.plakat
-    //     FROM anbefaling
-    //     INNER JOIN serie ON anbefaling.serieID = serie.idS
-    //     WHERE anbefaling.motakerID = ?
-    //     `).all(motakerID);
-    const mottatAnbefaling = db.prepare('SELECT * FROM anbefaling WHERE motakerID = ?').all(motakerID);
-    if (!mottatAnbefaling) return res.status(404).json({ message: "bruker ikke funnet" });
+    const mottatAnbefaling = db.prepare(`
+        SELECT anbefaling.*, serie.idS, serie.navn, serie.bio, serie.ar, serie.plakat, serie.stjerner
+        FROM anbefaling
+        INNER JOIN serie ON anbefaling.serieID = serie.idS
+        WHERE anbefaling.motakerID = ?
+    `).all(motakerID);
+    
+    if (!mottatAnbefaling || mottatAnbefaling.length === 0) {
+        return res.status(404).json({ message: "bruker ikke funnet" });
+    }
     res.json(mottatAnbefaling);
 });
-
-
 /*
 -------------------------------
     ANNET

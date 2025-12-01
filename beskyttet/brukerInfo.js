@@ -17,40 +17,45 @@
     }
 })(); 
 
-
-(async function () {
+    (async function () {
     const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
     const mottakerID = params.get("id"); //hent id fra søkefeltet
-
-    const res = await fetch('/anbefalt/:id'); //venter til den får infoen fra /serie
-    // const serieData = await res.json(); //venter til den får svar fra json
     if (!mottakerID) return console.warn("Ingen bruker-id i URL"); //! = mangler
 
-
-
     try {
-        const hent = await fetch(`/anbefalt/${mottakerID}`);//vent til du har id
-        if (!hent.ok) throw new Error("Feil ved henting av bruker");//hvis ingen id fra bruker tabell
+        const hent = await fetch(`/anbefalt/${mottakerID}`); //vent til du har id
+        if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
         const anbefaling = await hent.json();
-        //  document.querySelector('#anbefalt').appendChild(serieDiv); //sier hvor alt over skal ende opp
 
-        const vis = document.querySelector("#anbefalt")
+        const vis = document.querySelector("#anbefalt");
         if (vis) {
-            let kommentarer = "";
-            //
             for (const item of anbefaling) {
-                kommentarer += `${item.kommentar}\n`; //det som skal i "" er alle.kommentarer på \ny linje
+                const serieDiv = document.createElement('div');
+                serieDiv.classList.add('serieKonteiner');
+
+                const h3 = document.createElement('h3');
+                h3.textContent = `${item.navn} (${item.ar})`;
+                serieDiv.appendChild(h3);
+
+                const p = document.createElement('p');
+                p.textContent = `${item.bio}`;
+                serieDiv.appendChild(p);
+
+                const kommentar = document.createElement('p');
+                kommentar.textContent = `Kommentar: ${item.kommentar}`;
+                serieDiv.appendChild(kommentar);
+
+                if (item.plakat) {
+                    const bilde = document.createElement('img'); //lager bildet
+                    bilde.src = item.plakat //henter bilde fra serie.plakat
+                    bilde.alt = serie.navn;
+                    bilde.style.width = '120px';
+                    serieDiv.appendChild(bilde);
+                }
+                vis.appendChild(serieDiv);
             }
-            vis.innerText = kommentarer; 
         }
-        // document.querySelector('#anbefalt').appendChild(serieDiv); //sier hvor alt over skal ende opp
-    
-
-
-
-        // const vis = document.querySelector("#anbefalt"); //viser info i #visBruker (i html)
-        // if (vis) vis.innerText = ` ${anbefaling[0].kommentar}`;//hvis #visBruker finnes, skriver vi brukernavn og navn i den
     } catch (visser) {
         console.error(visser);
     }
-})(); 
+})();
