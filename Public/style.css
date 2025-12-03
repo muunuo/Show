@@ -13,18 +13,6 @@ body {
     margin: 5rem;
 }
 
-
-
-/* 
-form {
-    display: flex;
-    align-items: center ;
-    justify-content: center;
-    flex-direction: column;
-    
-} */
-
-
 #serie {
     --min-col-size: 300px;
     background-color: rgb(77, 181, 54);
@@ -34,4 +22,13 @@ form {
         repeat(auto-fit, minmax(min(var(--min-col-size), 100%), 1fr));
         /* Kevin Powell: https://www.youtube.com/watch?v=OZ6qKoq7RJU */
     margin: 1rem;
+}
+
+button {
+    background-color: white;
+    border-radius: 0.5rem;
+    border: solid white 0.2rem;
+
+    margin: 0.5rem;
+
 }

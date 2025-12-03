@@ -17,7 +17,7 @@
         const bruker = await idB.json();
 
         const vis = document.querySelector("#visBrukere"); //viser info i #visBruker (i html)
-        if (vis) vis.innerText = ` ${bruker.brukernavn} (${bruker.navn})`;//hvis #visBruker finnes, skriver vi brukernavn og navn i den
+        if (vis) vis.innerText = ` ${bruker.navn} @${bruker.brukernavn}`;//hvis #visBruker finnes, skriver vi brukernavn og navn i den
     } catch (visser) {
         console.error(visser);
     }
@@ -26,15 +26,17 @@
 
 /*
 -------------------------------
-    ANBEFALT
+    ANBEFALT av andre
 -------------------------------
 */
 
     (async function () {
     const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
     const mottakerID = params.get("id"); //hent id fra søkefeltet
+    
     if (!mottakerID) return console.warn("Ingen bruker-id i URL"); //! = mangler
 
+    
     try {
         const hent = await fetch(`/anbefalt/${mottakerID}`); //vent til du har id
         if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
@@ -48,16 +50,17 @@
                 // alt under legges inn i en serie konteiner (background color i css for å se)
 
                 const h3 = document.createElement('h3');
-                h3.textContent = `${an.navn} (${an.ar})`;
+                h3.textContent = `${an.navn}`;
                 serieDiv.appendChild(h3);
+
+                const under = document.createElement('p');
+                under.textContent = `${an.ar}`;
+                serieDiv.appendChild(under);
 
                 const p = document.createElement('p');
                 p.textContent = `${an.bio}`;
                 serieDiv.appendChild(p);
-
-                const kommentar = document.createElement('p');
-                kommentar.textContent = `Kommentar: ${an.kommentar}`;
-                serieDiv.appendChild(kommentar);
+                p.style.display = 'none';
 
                 if (an.plakat) {
                     const bilde = document.createElement('img'); //lager bildet
@@ -66,10 +69,60 @@
                     bilde.style.width = '120px';
                     serieDiv.appendChild(bilde);
                 }
+
+                const kommentar = document.createElement('p');
+                kommentar.textContent = `${an.kommentar}`;
+                serieDiv.appendChild(kommentar);
+
+                /*
+                -------------------------------
+                SLETTE FUNKSJON
+                -------------------------------
+                */
+                
+                const slettKnapp = document.createElement('button');
+                slettKnapp.textContent = "Avslå Anbefaling";
+                slettKnapp.classList.add('KnappForSletting');
+
+                slettKnapp.addEventListener('click', async () => {
+                // console.log("Avslått Anbefaling", an)
+                
+                    if (confirm(`Er du sikker at du vil avslå anbefalinger for "${an.navn}"?`)) {
+                        try {
+                            const svar = await fetch (`/anbefalt/${encodeURIComponent(an.idA)}`, {//henter anbefalingen
+                                method: 'DELETE' // Sletter anbefalingen
+                            });
+                            if (svar.ok) {
+                                serieDiv.remove();
+                                alert("anbefaling fjernet");
+                            } else {
+                                alert("feil ved sletting");
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            alert("feil ved sletting");
+                        }
+
+                        }
+                });
+
+
+
+
                 vis.appendChild(serieDiv);
+                serieDiv.appendChild(slettKnapp);
             }
+
+            
         }
     } catch (visser) {
         console.error(visser);
     }
 })();
+
+
+/*
+-------------------------------
+    SERIE slettet
+-------------------------------
+*/

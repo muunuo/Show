@@ -96,13 +96,15 @@ app.post('/opprettSerie', (req, res)=> { // oppretter en serie
 
 app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
     const serieListe = db.prepare('SELECT * FROM serie').all();
+
     res.json(serieListe);
+    
 });
 
 app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     const motakerID = req.params.id;
     const mottatAnbefaling = db.prepare(`
-        SELECT anbefaling.*, serie.idS, serie.navn, serie.bio, serie.ar, serie.plakat, serie.stjerner
+        SELECT anbefaling.*, serie.*
         FROM anbefaling
         INNER JOIN serie ON anbefaling.serieID = serie.idS
         WHERE anbefaling.motakerID = ?
@@ -113,6 +115,27 @@ app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     }
     res.json(mottatAnbefaling);
 });
+
+// app.get('/anbefaltSok', (req, res) => { //viser alle serier i serie.html
+//     const {sok} = req.body; //henter brukernavn og passord fra body
+    
+//     const sendSok = db.prepare('SELECT * FROM serie.navn WHERE sok = ?').get(sok);//henter alle brukernavn og passord
+//     if (!sendSok) { //hvis noe mangler får du failmelding
+//         return res.status(401).json({ message: "feil ved søk"});
+//     }
+//     console.log(sendSok)
+// });
+
+app.delete('/anbefalt/:id', (req, res) => {
+const id = req.params.id;
+const resultat = db.prepare('DELETE FROM anbefaling WHERE idA = ?').run(id);
+//må gjøre så kun resultatene med både serie, og bruker id (mottaker) slettes
+if (resultat.changes === 0) {
+    return res.status(404).json({ error: "Anbefaling ble ikke funnet"});
+}
+res.json({ message: "anbefaling fjernet"});
+});
+
 /*
 -------------------------------
     ANNET

@@ -1,5 +1,7 @@
 # Serie nettside
 
+Følgende nettside er kodet i håp om å ha et enkelt sted å smale serier jeg ser på, vil se på og har sett. Det skal i tilleg 
+
 ## Prosjekt
 
 ````

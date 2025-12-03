@@ -34,4 +34,6 @@ async function henteAlleSerier() {
     }
 }
 
+
+
 henteAlleSerier();
