@@ -106,9 +106,6 @@
                         }
                 });
 
-
-
-
                 vis.appendChild(serieDiv);
                 serieDiv.appendChild(slettKnapp);
             }
@@ -119,10 +116,3 @@
         console.error(visser);
     }
 })();
-
-
-/*
--------------------------------
-    SERIE slettet
--------------------------------
-*/
