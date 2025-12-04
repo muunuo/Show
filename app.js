@@ -26,14 +26,14 @@ const db = new Database('showDatabase.db'); // knytter databasen til dokumentet
 app.use(express.static('public')); // sier at den skal hente ting fra public, inkludert css
 app.use(express.static('beskyttet')); //sier de kan hente fra beskyttet (må endres om beskyttet noen gang blir beskyttet)
 app.use(express.urlencoded({ extended: true })); //lar oss hente ting fra søkebaren
+app.use(express.json()); 
 
 app.get('/', (req, res)=> { // sender deg til index i public om du ikke søker en bestemt sti
     res.sendFile(__dirname + '/public/index.html')
 });
 
 
-db.exec(
-'CREATE TABLE IF NOT EXISTS anbefaling (idA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, serieID INTEGER, motakerID INTEGER, senderID INTEGER, kommentar INTEGER, CONSTRAINT anbefaling FOREIGN KEY (serieID) REFERENCES serie (idS), CONSTRAINT anbefaling FOREIGN KEY (motakerID) REFERENCES bruker (id), CONSTRAINT anbefaling FOREIGN KEY (senderID) REFERENCES bruker (id))' )
+db.exec( 'CREATE TABLE IF NOT EXISTS anbefaling (idA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, serieID INTEGER, motakerID INTEGER, senderID INTEGER, kommentar TEXT, CONSTRAINT anbefaling FOREIGN KEY (serieID) REFERENCES serie (idS), CONSTRAINT anbefaling FOREIGN KEY (motakerID) REFERENCES bruker (id), CONSTRAINT anbefaling FOREIGN KEY (senderID) REFERENCES bruker (id))' )
 db.exec( 'CREATE TABLE IF NOT EXISTS bruker (id INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, brukernavn TEXT, passord TEXT, profilbilde BLOB, bio TEXT)' )
 db.exec( 'CREATE TABLE IF NOT EXISTS serie (idS INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, bio TEXT, ar INTEGER, plakat TEXT, stjerner INTEGER)' )
 db.exec( 'CREATE TABLE IF NOT EXISTS serieStatus (serieStatusID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, idS INTEGER REFERENCES serie (idS), idB INTEGER REFERENCES bruker (id), status)' )
@@ -116,6 +116,29 @@ app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     res.json(mottatAnbefaling);
 });
 
+/*
+-------------------------------
+    SENDE ANBEFALINGER TIL ANDRE
+-------------------------------
+*/
+
+app.post('/anbefalAndre', (req, res) => { //viser alle serier i serie.html
+    const { Aserie, motaker, sender, kommentar } = req.body;
+    console.log( Aserie, motaker, sender, kommentar)
+
+    try {//ser om den kan gjøre følgende
+        const insert = db.prepare('INSERT INTO anbefaling (serieID, motakerID, senderID, kommentar) VALUES (?, ?, ?, ?)'); //sier hvor det skal settes inn
+        insert.run(Aserie, motaker, sender, kommentar);//sier det skal settes inn
+        // res.send("Konto opprettet!");
+        res.json({ ok: true, message: "Anbefaling sendt"});
+    } catch (error) { //hvis den ikke klarte å gjøre det så gjør den følgende
+        console.log(error);//Error: viser frem feilmeldinger
+        // res.send("Feil ved opprettelse");
+        res.status(500).json({error:"Feil ved opprettelse" })
+    }
+    console.log(sender, kommentar)
+});
+
 // app.get('/anbefaltSok', (req, res) => { //viser alle serier i serie.html
 //     const {sok} = req.body; //henter brukernavn og passord fra body
     
@@ -126,6 +149,7 @@ app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
 //     console.log(sendSok)
 // });
 
+// SLETTE KNAPP
 app.delete('/anbefalt/:id', (req, res) => {
 const id = req.params.id;
 const resultat = db.prepare('DELETE FROM anbefaling WHERE idA = ?').run(id);

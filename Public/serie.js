@@ -1,3 +1,10 @@
+// function name(params) {
+//     const slettKnapp = document.createElement('button');
+//     slettKnapp.textContent = "Avslå Anbefaling";
+//     slettKnapp.classList.add('KnappForSletting');
+
+// }
+
 async function henteAlleSerier() {
     const res = await fetch('/alleSerier'); //venter til den får infoen fra /serie
     const serieData = await res.json(); //venter til den får svar fra json
@@ -33,7 +40,5 @@ async function henteAlleSerier() {
         document.querySelector('#serie').appendChild(serieDiv); //sier hvor alt over skal ende opp
     }
 }
-
-
 
 henteAlleSerier();

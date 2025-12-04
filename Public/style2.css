@@ -5,6 +5,7 @@
 #serPa {grid-area: serPa;}
 #anbefalt {grid-area: anbefalt;}
 #venn {grid-area: venn;}
+#anbefalAndre {grid-area: anbefalAndre;}
 
 
 #grid {
@@ -20,7 +21,8 @@
     "harSett harSett harSett  venn"
     "vilSe vilSe vilSe  venn"
     "serPa serPa serPa  venn"
-    "anbefalt anbefalt anbefalt  venn";
+    "anbefalt anbefalt anbefalt  venn"
+    "anbefalAndre anbefalAndre anbefalAndre  venn";
 }
 
 #visBrukere {
@@ -30,7 +32,7 @@
 }
 
 
-#serie {
+#serie, #anbefalAndre {
     background-color: rgb(26, 154, 133);
 }
 

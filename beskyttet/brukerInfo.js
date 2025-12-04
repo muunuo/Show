@@ -1,11 +1,8 @@
-//Viser brukernavn på toppen av siden
-
 /*
 -------------------------------
     BRUKERNAVN
 -------------------------------
 */
-
 (async function () {
     const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
     const id = params.get("id"); //hent id fra søkefeltet
@@ -116,3 +113,62 @@
         console.error(visser);
     }
 })();
+
+
+
+document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const Aserie = document.getElementById('Aserie').value;
+    const sender = new URLSearchParams(window.location.search).get('id'); // hent aktiv bruker-id
+    const motaker = document.getElementById('motaker').value;
+    const kommentar = document.getElementById('kommentar').value;
+
+    const res = await fetch('/anbefalAndre', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Aserie, sender, motaker, kommentar })
+    });
+
+    const json = await res.json();
+    if (res.ok) {
+        alert('Anbefaling sendt');
+        e.target.reset();
+    } else {
+    alert('Feil: ' + (json.error || 'ukjent'));
+    }
+});
+
+
+
+
+
+
+
+
+// // prøver å lage en anbefal til andre seksjon. Setter opp en dropdown med de forskjellige valgene
+// (async function () {
+//     const params = new URLSearchParams(window.location.search);
+//     const senderID = params.get("id");
+
+//     if (!senderID) return console.warn("Ingen brukerid i URL");
+
+//     try {
+//         // const hent = await fetch(`/anbefalt/${mottakerID}`); //vent til du har id
+//         // if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
+//         // const anbefaling = await hent.json();
+//         // const vis = document.querySelector("#anbefalt");
+
+//         const velgSerie = document.createElement('select');
+//         velgSerie.classList.add('velgSerieKontainer');
+//         if (vis) {
+//             for (const an of anbefaling) {
+
+//                 const valg = document.createElement('option');
+//                 valg.textContent = `${an.navn}`;
+//                 velgSerie.appendChild(option);
+
+//             }
+//                 }
+//     }
+
+// })();
