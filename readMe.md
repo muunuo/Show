@@ -1,76 +1,87 @@
-# Serie nettside
+Api
+Vidio
 
-Følgende nettside er kodet i håp om å ha et enkelt sted å smale serier jeg ser på, vil se på og har sett. Det skal i tilleg 
+# Co-Watch 📺
 
-## Prosjekt
+Co-Watch is a website for friends who want to be able to talk about the same shows, but can't watch them together. Recommend shows to friends, get recommended shows by friends. And if you don't have friends, then you can register what shows you have, want to and curently are watching! 
 
-````
-Takk til følgende folk for ekstra hjelp:
-Jo Bjørnar
-Felix
-Tim
-Alex
-Andre i klassen som sitter rundt meg
-````
+- [Design Process 🎨](#design-process-🎨)
+    - Database
+    - Design
+- [ Implemented ](#implemented)
+    - JS
+    - HTML
+    - CSS
+- [To be implemented](#to-be-implemented)
+- [Hope to have](#hope-to-have)
 
-mangler:
-* vidio
-* bilde av SQL fil
-* størelse på bildene
+## Development Status 
+The project is in active development and is starting to get most of it's basic features. We are still a far ways off from beta, or even alpha testing, but it is moving forward. 
+
+## Design Process 🎨 
+
+### Database
+The database started off as a copy of a sosial media database, in other words, it was way to overcomplicated. I ended up redoing it a few times to make it better, and my teacher gave me the base to the finished database. 
+<img src="Public/bilder/storDatabase.jpg" alt="A database written on paiper. It has 14 different tables and is all in all unorganized." width= "250rem" >
+<img src="Public/bilder/mediumDatabase.jpg" alt="A mutch smaler database, this time with just 6 tables." width= "250rem">
+<img src="Public/bilder/litenDatabase.jpg" alt="A databse of 3 tables and a 4th labeld extra. The database consists of user, show, recomondations and the extra is account." width= "250rem">
+I then made it into a propper database using SQLiteStudio.
+
+### Design 
+The design of the website was actully quite easy this time. I tried setting it up a bit like a social media platform from the 2000's where the friendlist was on the right side, the bar on the top and the rest taking the space that is left.
+
+<img src="Public/bilder/FigmaDesign.png" alt="A simplefied drawing of a website. There is a hamburger menu in the top left corner, the word show is under as a title. 3 lines with 5 red rectangles in each are evenly spaced underneath. Next to them on the right is a purple circle with arrows in them. Next to there agin is a white box with the word" width= "250rem">
+
+<img src="Public/bilder/SocialMediaOld.jpg" alt="A old social platform. Layout is information about the user taking up most the screen. On the top there is a smal bare with options, on the right side there is a friends list." width= "250rem">
+
+## Implemented
+On this date, the 5th of Desember 2025, are the following features implimented.
+
+- [x] Define project scope
+- [x] Gather requirements
+- [x] Create detailed project plan
+- [x] You can make an account
+- [ ] Hashed passwords
+- [ ] Protected websites
+
+- You can make an account.
+- You have to have an account to access the website
+    - No hashing passwords pr protected websites yet.
+- You can se all registerd series
+- Your user name is dicplaid at the top of the page.
+- You can register a show with a picture as well.
+- You can send recommendations to others
+- You can recive recommendations from others
 
 
-bruker kan nå legge inn sine egene bilder som brukes for seriene. 
+## To be implemented
 
-## Database
+- Sending recommendations is better:
+    - You can send by name insted of ID.
+    - You can send by clicking on the show and chosing an option.
+- Adding/ removing things from a to watch list
+- Adding/ removing things from a have watched list
+- Adding/ removing things from a curently watching list
+- Adding friends and seeing their profiles
+- Adding profile picturs and user bios.
 
-#### Første databasen
 
-For mitt første forsøk brukte jeg en sosiale media database som et utgangspunkt.
+        -
+- Protected website
+- Hashed passwords
+- 
 
-![En database som betår av 14 tabeller. Den er tegnet på papir og highlither har blitt brukt til å makere de forskjellige tabellene](/bilder_ikkePublic/storDatabase.jpg)
+## Hope to have 
+These are things that I can't impliment for the time being do to either my current skillsett or just lack of time.
+* A show API so users don't have to manuely register shows.
+* Adding groups, so you can recomend a show to more then one person at a time.
 
-Som du kan se første dette til en stor, overkomplisert database. Jeg brukte en del tid på å kutte forskjellige deler frem til jeg fikk noe som så litt mindre overvelmene ut. 
-![En database som betår av 6 tabeller koblet sammen, og en 7 som er tom. Den er tegnet på papir. Noen av tabellene inkluderer bruker, show, anbefale, venner, konto og anbefaleShow som var brukt til å unngå en mange til mange kobling.](/bilder_ikkePublic/mediumDatabase.jpg)
+## Tecknology
 
-Databasen til nettsiden jeg ente opp å bruke er en svært forenklet versjon av den over, som jeg lagte ved hjelp av min lærer, Jo Bjørnar. <br>
-![En database som betår av 4 tabeller koblet sammen, en av de er makert "valgfri". Den makert valgfri heter konto. De tre andre er bruker, anbefaling og serie.](/bilder_ikkePublic/litenDatabase.jpg)
+## How it works/ Functinality
 
-Som du kan se på bildet har databasen 4 tabeller, en makert valgfri, som vil tillate bruker å gjøre følgende ting:
+t is curently not in alpha testing do to missing features, but we hope to get it ready for that by feburary. 
 
-1. Legge inn serier
-2. Si hva serier de: 
-    - ønsker å se
-    - har sett
-    - holder på å se
-3. Få og gi serie anbefalinger til "venner".
-4. Lar brukere legge inn bilder. Både profilbilde og plakater til serier.
-5. Bruker kan legge igjen kommentarter på serier som "venner" kan lese.
-6. Bruker kan ha et navn og et brukernavn.
-7. Bruker kan gi stjerner til serier for å vise hva de liker/ ikke liker.
 
-Her er databasen sutte opp i SQLite. Konto har blitt fjernet for nå. 
 
-![Bilde av en SQL database som består av 3 tabeller. Bruker, anbefaling og serie. anbefaling har idA, serieID, motakerID, senderID og kommentar. Bruker har id, navn, brukernavn, passord, profilbilde. Serie har idS, navn, bio, ar(år), plakat og stjerne.](/bilder_ikkePublic/SQLdatabase)
 
-### Fremtidig
-_Hvis_ tiden tillater ønsker jeg også å legge til følgende ting:
-
-1. Beskyttet innlogging og passord.
-2. Show hentes fra en database (bruker må ikke manuelt ligge inn show)
-3. Bruker kan søke opp show fra databasen
-4. Show har sjangere og nøkkelord.
-5. Ransjere hvor viktig det er at vennen din ser anbefalingene
-6. Venneliste, bio, osv.
-7. Unike brukernavn (navn kan være like)
-8. (Usansyneligt) Show kan anbefales til brukere av nettsiden basert på hva brukeren tidligere har sett på.
-
-# Så langt har jeg fullført følgende
-
-1. sutte opp en enkel database
-2. Tegnet opp hvordan nettsiden skal se ut.
-3. Sette opp og begynne på et .md dokument.
-4. Sette opp et eget reposetry og levere dette til lærer. 
-5. Sutte opp server
-6. Sutte opp så html ligger på server
-7. sutte opp (ubeskyttet) oppretting av konto
-8. Sutte opp slik at du kan gå fra pålogging siden til hovedsiden. 
