@@ -13,8 +13,11 @@ flytte brukerguide til nettsiden ikke her inne
 
 - [Development Status](#development-status)
 - [Design Process 🎨](#design-process-🎨)
-- [ Features ](#features)
-- [Hope to have](#hope-to-have)
+- [Kode](#kode)
+- [Features💡](#features-💡)
+- [Technology](#technology)
+- [Project Structure](#project-structure)
+- [Contributors](#contributors)
 
 ## Development Status 
 The project is in active development, a good amount of basic featurs have been implemented, but are missing most of the polish.
@@ -106,7 +109,7 @@ The design of the website was actully quite easy this time. I tried setting it u
 5. Make your friends send some recommendations to (or send some to yourself)
 6. Se what recomondations you have gotten, and get rid of the ones you don't like!
 
-## Features
+## Kode 
 
 For users to give and recive recommendations I had to get both a senderID, reciverID and a showID. On top of this i had to connect the showID in recommendations to the idS in show, that way i could actully display the show info.
 
@@ -184,6 +187,8 @@ JSON is used to resive and send as mantiond earlier. And mot of the rest of the 
                 serieDiv.appendChild(kommentar);
 ```
 
+
+## Features💡
 ### Implemented ✅
 - [x] Making an account
 - [x] Can't access website without account
