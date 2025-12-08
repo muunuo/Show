@@ -1,12 +1,3 @@
-Api
-Vidio
-ruter
-Sammenhenger i Database
-
-ting å vise koden til: Registrere serie, sende og få anbefalinger opprette brukere/ logge inn
-
-flytte brukerguide til nettsiden ikke her inne
-
 # Co-Watch 📺
 
 ***Co-Watch*** is a website for friends who want to be able to talk about the same shows, but can't watch them together. Recommend shows to friends, get recommended shows by friends, and if you don't have friends, then you can register what shows you have, want to and curently are watching! 
@@ -238,7 +229,7 @@ package.json # Dependencies
 ## Contributors
 Thank you to the other students in my class who contributed to my website with their knowledge. Thank you especially to my teacher who helped make sense of my code and improve my idea.
 
-## Auther 
+## Author 
 
 Benny
 
@@ -247,5 +238,17 @@ muunuo on Github
 -----
 ***Last updated***
 - December 5th 2025
+
+
+
+
+Api
+Vidio
+ruter
+Sammenhenger i Database
+
+ting å vise koden til: Registrere serie, sende og få anbefalinger opprette brukere/ logge inn
+
+flytte brukerguide til nettsiden ikke her inne
 
 
