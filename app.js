@@ -32,11 +32,43 @@ app.get('/', (req, res)=> { // sender deg til index i public om du ikke søker e
     res.sendFile(__dirname + '/public/index.html')
 });
 
+db.exec(`
+CREATE TABLE IF NOT EXISTS bruker (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    navn TEXT,
+    brukernavn TEXT,
+    passord TEXT,
+    profilbilde BLOB,
+    bio TEXT
+);
 
-db.exec( 'CREATE TABLE IF NOT EXISTS anbefaling (idA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, serieID INTEGER, motakerID INTEGER, senderID INTEGER, kommentar TEXT, CONSTRAINT anbefaling FOREIGN KEY (serieID) REFERENCES serie (idS), CONSTRAINT anbefaling FOREIGN KEY (motakerID) REFERENCES bruker (id), CONSTRAINT anbefaling FOREIGN KEY (senderID) REFERENCES bruker (id))' )
-db.exec( 'CREATE TABLE IF NOT EXISTS bruker (id INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, brukernavn TEXT, passord TEXT, profilbilde BLOB, bio TEXT)' )
-db.exec( 'CREATE TABLE IF NOT EXISTS serie (idS INTEGER PRIMARY KEY AUTOINCREMENT, navn TEXT, bio TEXT, ar INTEGER, plakat TEXT, stjerner INTEGER)' )
-db.exec( 'CREATE TABLE IF NOT EXISTS serieStatus (serieStatusID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, idS INTEGER REFERENCES serie (idS), idB INTEGER REFERENCES bruker (id), status)' )
+CREATE TABLE IF NOT EXISTS serie (
+    idS INTEGER PRIMARY KEY AUTOINCREMENT,
+    navn TEXT,
+    bio TEXT,
+    ar INTEGER,
+    plakat TEXT,
+    stjerner INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS anbefaling (
+    idA INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    serieID INTEGER,
+    motakerID INTEGER,
+    senderID INTEGER,
+    kommentar TEXT,
+    FOREIGN KEY (serieID) REFERENCES serie(idS),
+    FOREIGN KEY (motakerID) REFERENCES bruker(id),
+    FOREIGN KEY (senderID) REFERENCES bruker(id)
+);
+
+CREATE TABLE IF NOT EXISTS serieStatus (
+    serieStatusID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    idS INTEGER REFERENCES serie(idS),
+    idB INTEGER REFERENCES bruker(id),
+    status TEXT
+);
+`);
 
 /*
 -------------------------------
@@ -101,6 +133,32 @@ app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
     
 });
 
+app.get('/harSett/:id', (req, res) => { //viser alle anbefalte serier med info
+    const person = req.params.id;
+    const status = req.query.status || 'sett';
+
+    try {
+    const rader = db.prepare(`
+        SELECT serieStatus.*, serie.*
+        FROM serieStatus
+        INNER JOIN serie ON serieStatus.idS = serie.idS
+        WHERE serieStatus.status = ? 
+        AND serieStatus.idB = ?
+        `).all(status, person);
+
+        return res.json(rader);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'DB error'});
+    }
+});//Må søke opp: http://localhost:3000/harSett/18?status=sett
+
+/*
+-------------------------------
+    ANBEFALINGER
+-------------------------------
+*/
+
 app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     const motakerID = req.params.id;
     const mottatAnbefaling = db.prepare(`
@@ -116,15 +174,8 @@ app.get('/anbefalt/:id', (req, res) => { //viser alle anbefalte serier med info
     res.json(mottatAnbefaling);
 });
 
-/*
--------------------------------
-    SENDE ANBEFALINGER TIL ANDRE
--------------------------------
-*/
-
 app.post('/anbefalAndre', (req, res) => { //viser alle serier i serie.html
     const { Aserie, motaker, sender, kommentar } = req.body;
-    console.log( Aserie, motaker, sender, kommentar)
 
     try {//ser om den kan gjøre følgende
         const insert = db.prepare('INSERT INTO anbefaling (serieID, motakerID, senderID, kommentar) VALUES (?, ?, ?, ?)'); //sier hvor det skal settes inn
@@ -136,7 +187,6 @@ app.post('/anbefalAndre', (req, res) => { //viser alle serier i serie.html
         // res.send("Feil ved opprettelse");
         res.status(500).json({error:"Feil ved opprettelse" })
     }
-    console.log(sender, kommentar)
 });
 
 // app.get('/anbefaltSok', (req, res) => { //viser alle serier i serie.html

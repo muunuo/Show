@@ -82,7 +82,97 @@
                 slettKnapp.classList.add('KnappForSletting');
 
                 slettKnapp.addEventListener('click', async () => {
-                // console.log("Avslått Anbefaling", an)
+                
+                    if (confirm(`Er du sikker at du vil avslå anbefalinger for "${an.navn}"?`)) {
+                        try {
+                            const svar = await fetch (`/anbefalt/${encodeURIComponent(an.idA)}`, {//henter anbefalingen
+                                method: 'DELETE' // Sletter anbefalingen
+                            });
+                            if (svar.ok) {
+                                serieDiv.remove();
+                                alert("anbefaling fjernet");
+                            } else {
+                                alert("feil ved sletting");
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            alert("feil ved sletting");
+                        }
+
+                        }
+                });
+
+                vis.appendChild(serieDiv);
+                serieDiv.appendChild(slettKnapp);
+            }
+
+            
+        }
+    } catch (visser) {
+        console.error(visser);
+    }
+})();
+
+/*
+-------------------------------
+HAR SETT SEKSJON
+-------------------------------
+*/
+    (async function () {
+    const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
+    const person = params.get("id"); //hent id fra søkefeltet
+    
+    if (!person) return console.warn("Ingen bruker-id i URL"); //! = mangler
+
+    
+    try {
+        const hent = await fetch(`/anbefalt/${person}`); //vent til du har id
+        if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
+        const anbefaling = await hent.json();
+
+        const vis = document.querySelector("#anbefalt"); //heter div med id anbefalt 
+        if (vis) { //om anbefalt vises
+            for (const an of anbefaling) { //for hver ting innenfor anvefaling lages følgende: //an = anbefalt av venner
+                const serieDiv = document.createElement('div');
+                serieDiv.classList.add('serieKonteiner');// oppretter en klasse som heter serieKontainer
+                // alt under legges inn i en serie konteiner (background color i css for å se)
+
+                const h3 = document.createElement('h3');
+                h3.textContent = `${an.navn}`;
+                serieDiv.appendChild(h3);
+
+                const under = document.createElement('p');
+                under.textContent = `${an.ar}`;
+                serieDiv.appendChild(under);
+
+                const p = document.createElement('p');
+                p.textContent = `${an.bio}`;
+                serieDiv.appendChild(p);
+                p.style.display = 'none';
+
+                if (an.plakat) {
+                    const bilde = document.createElement('img'); //lager bildet
+                    bilde.src = an.plakat //henter bilde fra serie.plakat
+                    bilde.alt = serie.navn;
+                    bilde.style.width = '120px';
+                    serieDiv.appendChild(bilde);
+                }
+
+                const kommentar = document.createElement('p');
+                kommentar.textContent = `${an.kommentar}`;
+                serieDiv.appendChild(kommentar);
+
+                /*
+                -------------------------------
+                SLETTE FUNKSJON
+                -------------------------------
+                */
+                
+                const slettKnapp = document.createElement('button');
+                slettKnapp.textContent = "Avslå Anbefaling";
+                slettKnapp.classList.add('KnappForSletting');
+
+                slettKnapp.addEventListener('click', async () => {
                 
                     if (confirm(`Er du sikker at du vil avslå anbefalinger for "${an.navn}"?`)) {
                         try {
@@ -116,27 +206,27 @@
 
 
 
-document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const Aserie = document.getElementById('Aserie').value;
-    const sender = new URLSearchParams(window.location.search).get('id'); // hent aktiv bruker-id
-    const motaker = document.getElementById('motaker').value;
-    const kommentar = document.getElementById('kommentar').value;
+// document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
+//     e.preventDefault();
+//     const Aserie = document.getElementById('Aserie').value;
+//     const sender = new URLSearchParams(window.location.search).get('id'); // hent aktiv bruker-id
+//     const motaker = document.getElementById('motaker').value;
+//     const kommentar = document.getElementById('kommentar').value;
 
-    const res = await fetch('/anbefalAndre', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ Aserie, sender, motaker, kommentar })
-    });
+//     const res = await fetch('/anbefalAndre', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ Aserie, sender, motaker, kommentar })
+//     });
 
-    const json = await res.json();
-    if (res.ok) {
-        alert('Anbefaling sendt');
-        e.target.reset();
-    } else {
-    alert('Feil: ' + (json.error || 'ukjent'));
-    }
-});
+//     const json = await res.json();
+//     if (res.ok) {
+//         alert('Anbefaling sendt');
+//         e.target.reset();
+//     } else {
+//     alert('Feil: ' + (json.error || 'ukjent'));
+//     }
+// });
 
 
 
