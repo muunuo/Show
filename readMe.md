@@ -188,22 +188,23 @@ JSON is used to resive and send as mantiond earlier. And mot of the rest of the 
 - [x] Send recommendations
 - [x] Receive recommendations
 - [x] Delete recommendations you don't want
+- [x] To watch list
+- [x] Have watched list
+- [x] Currently watching list
+- [x] Username visible at the top
 
 ### To Be Implemented 🚧
-- [ ] Can't recive a recomondation multiple times 
-- [ ] Can delete a recomondation multiple times
-- [ ] 
+- [ ] Registrer via nettsiden show du ser på, vil se, eller har sett.
+- [ ] Forkorte kode i brukerInfo (skal, ser og har sett)
 - [ ] Hashing passwords
 - [ ] Protected website
-- [ ] Username visible at the top
 - [ ] Send recommendations not using ID
 - [ ] Get more info on a show by clicking it
-- [ ] To watch list
-- [ ] Have watched list
-- [ ] Currently watching list
 - [ ] Delete from all
 - [ ] Adding friends/friends list
 - [ ] Profile picture and bio
+- [ ] Can't recive a recomondation multiple times 
+- [ ] Can delete a recomondation multiple times
 
 ### Future Ideas 💡
 These are things that I can't impliment for the time being do to either my current skillsett or just lack of time.

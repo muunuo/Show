@@ -126,6 +126,21 @@ app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
     sett/ser
 -------------------------------
 */
+// app.get('/serieStatus/:id', (req, res) => { 
+//     const person = req.params.id;
+//     const status = req.params
+//     const sjekkStatus = db.prepare(`
+//         SELECT serieStatus.*, serie.*
+//         FROM serieStatus
+//         INNER JOIN serie ON serieStatus.idS = serie.idS 
+//         WHERE status = 'sett'
+//         AND serieStatus.idB = ?
+//         `).all(person)
+
+//     res.json(sjekkStatus)
+
+// });//Må søke opp: http://localhost:3000/harSett/18?status=sett
+
 
 app.get('/harSett/:id', (req, res) => { 
     const person = req.params.id;
