@@ -171,6 +171,109 @@ HAR SETT SEKSJON
 
 
 
+
+(async function () {
+    const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
+    const person = params.get("id"); //hent id fra søkefeltet
+    
+    if (!person) return console.warn("Ingen bruker-id i URL"); //! = mangler
+
+    
+    try {
+        const hent = await fetch(`/serPa/${person}`); //vent til du har id
+        if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
+        const serPa = await hent.json();
+
+        const vis = document.querySelector("#serPa"); //heter div med id anbefalt 
+        if (vis) { //om anbefalt vises
+            for (const ser of serPa) { //for hver ting innenfor anvefaling lages følgende: //sett = show du har sett
+                const serieDiv = document.createElement('div');
+                serieDiv.classList.add('serieKonteiner');// oppretter en klasse som heter serieKontainer
+                // alt under legges inn i en serie konteiner (background color i css for å se)
+
+                const h3 = document.createElement('h3');
+                h3.textContent = `${ser.navn}`;
+                serieDiv.appendChild(h3);
+
+                const under = document.createElement('p');
+                under.textContent = `${ser.ar}`;
+                serieDiv.appendChild(under);
+
+                const p = document.createElement('p');
+                p.textContent = `${ser.bio}`;
+                serieDiv.appendChild(p);
+                p.style.display = 'none';
+
+                if (ser.plakat) {
+                    const bilde = document.createElement('img'); //lager bildet
+                    bilde.src = ser.plakat //henter bilde fra serie.plakat
+                    bilde.alt = serie.navn;
+                    bilde.style.width = '120px';
+                    serieDiv.appendChild(bilde);
+                }
+
+                vis.appendChild(serieDiv);
+            }
+
+            
+        }
+    } catch (visser) {
+        console.error(visser);
+    }
+})();
+
+
+(async function () {
+    const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
+    const person = params.get("id"); //hent id fra søkefeltet
+    
+    if (!person) return console.warn("Ingen bruker-id i URL"); //! = mangler
+
+    
+    try {
+        const hent = await fetch(`/vilSe/${person}`); //vent til du har id
+        if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
+        const vilSe = await hent.json();
+
+        const vis = document.querySelector("#vilSe"); //heter div med id anbefalt 
+        if (vis) { //om anbefalt vises
+            for (const vil of vilSe) { //for hver ting innenfor anvefaling lages følgende: //sett = show du har sett
+                const serieDiv = document.createElement('div');
+                serieDiv.classList.add('serieKonteiner');// oppretter en klasse som heter serieKontainer
+                // alt under legges inn i en serie konteiner (background color i css for å se)
+
+                const h3 = document.createElement('h3');
+                h3.textContent = `${vil.navn}`;
+                serieDiv.appendChild(h3);
+
+                const under = document.createElement('p');
+                under.textContent = `${vil.ar}`;
+                serieDiv.appendChild(under);
+
+                const p = document.createElement('p');
+                p.textContent = `${vil.bio}`;
+                serieDiv.appendChild(p);
+                p.style.display = 'none';
+
+                if (vil.plakat) {
+                    const bilde = document.createElement('img'); //lager bildet
+                    bilde.src = vil.plakat //henter bilde fra serie.plakat
+                    bilde.alt = serie.navn;
+                    bilde.style.width = '120px';
+                    serieDiv.appendChild(bilde);
+                }
+
+                vis.appendChild(serieDiv);
+            }
+
+            
+        }
+    } catch (visser) {
+        console.error(visser);
+    }
+})();
+
+
 // document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
 //     e.preventDefault();
 //     const Aserie = document.getElementById('Aserie').value;

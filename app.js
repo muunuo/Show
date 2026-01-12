@@ -141,6 +141,34 @@ app.get('/harSett/:id', (req, res) => {
 
 });//Må søke opp: http://localhost:3000/harSett/18?status=sett
 
+app.get('/serPa/:id', (req, res) => { 
+    const person = req.params.id;
+    const sjekkStatus = db.prepare(`
+        SELECT serieStatus.*, serie.*
+        FROM serieStatus
+        INNER JOIN serie ON serieStatus.idS = serie.idS 
+        WHERE status = 'ser'
+        AND serieStatus.idB = ?
+        `).all(person)
+
+    res.json(sjekkStatus)
+
+});
+
+app.get('/vilSe/:id', (req, res) => { 
+    const person = req.params.id;
+    const sjekkStatus = db.prepare(`
+        SELECT serieStatus.*, serie.*
+        FROM serieStatus
+        INNER JOIN serie ON serieStatus.idS = serie.idS 
+        WHERE status = 'vil'
+        AND serieStatus.idB = ?
+        `).all(person)
+
+    res.json(sjekkStatus)
+
+});
+
 /*
 -------------------------------
     ANBEFALINGER
