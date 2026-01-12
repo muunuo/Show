@@ -190,6 +190,9 @@ JSON is used to resive and send as mantiond earlier. And mot of the rest of the 
 - [x] Delete recommendations you don't want
 
 ### To Be Implemented 🚧
+- [ ] Can't recive a recomondation multiple times 
+- [ ] Can delete a recomondation multiple times
+- [ ] 
 - [ ] Hashing passwords
 - [ ] Protected website
 - [ ] Username visible at the top
@@ -198,7 +201,7 @@ JSON is used to resive and send as mantiond earlier. And mot of the rest of the 
 - [ ] To watch list
 - [ ] Have watched list
 - [ ] Currently watching list
-- [ ] Delete from watch lists
+- [ ] Delete from all
 - [ ] Adding friends/friends list
 - [ ] Profile picture and bio
 

@@ -1,15 +1,3 @@
-/*  
-NESTE MÅL
-
-Hente ut anbefalinger fra databasen.
-
-PLAN:
-harkode inn anbefalinger
-Vise alle anbefalinger
-Vise kun en person sine anbefalinger med hardkode
-Bruke lignende kode som den for å hente brukernavn til å hente anbefalingene.
-*/
-
 /*
 -------------------------------
     OPPSETT
@@ -133,24 +121,24 @@ app.get('/alleSerier', (req, res) => { //viser alle serier i serie.html
     
 });
 
-app.get('/harSett/:id', (req, res) => { //viser alle anbefalte serier med info
-    const person = req.params.id;
-    const status = req.query.status || 'sett';
+/*
+-------------------------------
+    sett/ser
+-------------------------------
+*/
 
-    try {
-    const rader = db.prepare(`
+app.get('/harSett/:id', (req, res) => { 
+    const person = req.params.id;
+    const sjekkStatus = db.prepare(`
         SELECT serieStatus.*, serie.*
         FROM serieStatus
-        INNER JOIN serie ON serieStatus.idS = serie.idS
-        WHERE serieStatus.status = ? 
+        INNER JOIN serie ON serieStatus.idS = serie.idS 
+        WHERE status = 'sett'
         AND serieStatus.idB = ?
-        `).all(status, person);
+        `).all(person)
 
-        return res.json(rader);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({error: 'DB error'});
-    }
+    res.json(sjekkStatus)
+
 });//Må søke opp: http://localhost:3000/harSett/18?status=sett
 
 /*

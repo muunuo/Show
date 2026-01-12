@@ -118,6 +118,7 @@
 HAR SETT SEKSJON
 -------------------------------
 */
+
     (async function () {
     const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
     const person = params.get("id"); //hent id fra søkefeltet
@@ -126,75 +127,39 @@ HAR SETT SEKSJON
 
     
     try {
-        const hent = await fetch(`/anbefalt/${person}`); //vent til du har id
+        const hent = await fetch(`/harSett/${person}`); //vent til du har id
         if (!hent.ok) throw new Error("Feil ved henting av bruker"); //hvis ingen id fra bruker tabell
-        const anbefaling = await hent.json();
+        const harSett = await hent.json();
 
-        const vis = document.querySelector("#anbefalt"); //heter div med id anbefalt 
+        const vis = document.querySelector("#harSett"); //heter div med id anbefalt 
         if (vis) { //om anbefalt vises
-            for (const an of anbefaling) { //for hver ting innenfor anvefaling lages følgende: //an = anbefalt av venner
+            for (const sett of harSett) { //for hver ting innenfor anvefaling lages følgende: //sett = show du har sett
                 const serieDiv = document.createElement('div');
                 serieDiv.classList.add('serieKonteiner');// oppretter en klasse som heter serieKontainer
                 // alt under legges inn i en serie konteiner (background color i css for å se)
 
                 const h3 = document.createElement('h3');
-                h3.textContent = `${an.navn}`;
+                h3.textContent = `${sett.navn}`;
                 serieDiv.appendChild(h3);
 
                 const under = document.createElement('p');
-                under.textContent = `${an.ar}`;
+                under.textContent = `${sett.ar}`;
                 serieDiv.appendChild(under);
 
                 const p = document.createElement('p');
-                p.textContent = `${an.bio}`;
+                p.textContent = `${sett.bio}`;
                 serieDiv.appendChild(p);
                 p.style.display = 'none';
 
-                if (an.plakat) {
+                if (sett.plakat) {
                     const bilde = document.createElement('img'); //lager bildet
-                    bilde.src = an.plakat //henter bilde fra serie.plakat
+                    bilde.src = sett.plakat //henter bilde fra serie.plakat
                     bilde.alt = serie.navn;
                     bilde.style.width = '120px';
                     serieDiv.appendChild(bilde);
                 }
 
-                const kommentar = document.createElement('p');
-                kommentar.textContent = `${an.kommentar}`;
-                serieDiv.appendChild(kommentar);
-
-                /*
-                -------------------------------
-                SLETTE FUNKSJON
-                -------------------------------
-                */
-                
-                const slettKnapp = document.createElement('button');
-                slettKnapp.textContent = "Avslå Anbefaling";
-                slettKnapp.classList.add('KnappForSletting');
-
-                slettKnapp.addEventListener('click', async () => {
-                
-                    if (confirm(`Er du sikker at du vil avslå anbefalinger for "${an.navn}"?`)) {
-                        try {
-                            const svar = await fetch (`/anbefalt/${encodeURIComponent(an.idA)}`, {//henter anbefalingen
-                                method: 'DELETE' // Sletter anbefalingen
-                            });
-                            if (svar.ok) {
-                                serieDiv.remove();
-                                alert("anbefaling fjernet");
-                            } else {
-                                alert("feil ved sletting");
-                            }
-                        } catch (error) {
-                            console.error(error);
-                            alert("feil ved sletting");
-                        }
-
-                        }
-                });
-
                 vis.appendChild(serieDiv);
-                serieDiv.appendChild(slettKnapp);
             }
 
             
