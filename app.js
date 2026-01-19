@@ -71,6 +71,15 @@ CREATE TABLE IF NOT EXISTS serieStatus (
 );
 `);
 
+function kreverInnlogging(req, res, next) {
+    if (!req.session.bruker) {
+        return res.redirect("/");
+    }
+    next();
+}
+
+app.use('/beskyttet', kreverInnlogging, express.static(path.join(__dirname, 'beskyttet')));
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -81,13 +90,20 @@ app.get("/", (req, res) => {
     BRUKERE
 -------------------------------
 */
+
+// app.get("/api/minside",kreverInnlogging, (req, res) => {
+//     const brukerId = req.session.bruker.id;
+//     const bruker = db.prepare("SELECT id, brukernavn, navn, passord FROM bruker WHERE id = ?").get(brukerId);
+//     res.json({ bruker });
+// });
+
 app.post('/opprettKonto', async (req, res) => { // Oppretter ny brukerkonto
     const { brukernavn, navn, passord } = req.body;
     
-    // const eksisterendeBruker = db.prepare("SELECT * FROM bruker WHERE brukernavn = ?").get(brukernavn)
-    // if (eksisterendeBruker) {
-    //     return res.status(400).json({ message: "Bruker med dette brukernavnet eksisterer allerede"});
-    // }
+    const eksisterendeBruker = db.prepare("SELECT * FROM bruker WHERE brukernavn = ?").get(brukernavn)
+    if (eksisterendeBruker) {
+        return res.status(400).json({ message: "Bruker med dette brukernavnet eksisterer allerede"});
+    }
 
     try { //ser om den kan gjøre følgende
         const saltRounds = 10;
@@ -104,15 +120,26 @@ app.post('/opprettKonto', async (req, res) => { // Oppretter ny brukerkonto
     }
 });
 
-// app.post('/innlogget', (req, res)=> { // Lar deg logge inn
-//     const {brukernavn, passord} = req.body; //henter brukernavn og passord fra body
+app.post('/innlogget', async (req, res)=> { // Lar deg logge inn
+    const {brukernavn, passord} = req.body; //henter brukernavn og passord fra body
     
-//     const bruker = db.prepare('SELECT * FROM bruker WHERE brukernavn = ? AND passord = ?').get(brukernavn, passord);//henter alle brukernavn og passord
-//     if (!bruker) { //hvis noe mangler får du failmelding
-//         return res.status(401).json({ message: "feil ved brukernavn eller passord"});
-//     }
-//     res.redirect(`/innlogget.html?id=${bruker.id}`); //hvis det fungerer får du få videre
-// });
+    const bruker = db.prepare('SELECT * FROM bruker WHERE brukernavn = ?').get(brukernavn);//henter alle brukernavn og passord
+    if (!bruker) { //hvis noe mangler får du failmelding
+        return res.status(401).json({ message: "feil brukernavn eller passord"});
+    }
+
+    const gyldigPassord = await bcrypt.compare(passord, bruker.passord);
+    if (!gyldigPassord) {
+        return res.status(401).json({ message: "feil brukernavn eller passord"});
+    }
+    // req.session.bruker = { id: bruker.id, brukernavn: bruker.brukernavn };
+    res.json("Innlogget vellykket"); //hvis det fungerer får du få videre
+});
+
+// app.post("/api/logout", (req, res) => {
+//     req.session.destroy();
+//     res.json({message: "Du er nå logget ut"});
+// }) 
 
 // app.get('/bruker/:id', (req, res) => { //Vise frem brukernavn når innlogget
 //     const id = req.params.id;
