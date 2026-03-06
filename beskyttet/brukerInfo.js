@@ -18,7 +18,7 @@
     } catch (visser) {
         console.error(visser);
     }
-})(); 
+})();
 
 
 /*
@@ -273,6 +273,29 @@ HAR SETT SEKSJON
     }
 })();
 
+document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    const sender = params.get('id'); // hent aktiv bruker-id
+
+    const Aserie = document.getElementById('Aserie').value;
+    const motaker = document.getElementById('motaker').value;
+    const kommentar = document.getElementById('kommentar').value;
+
+    const res = await fetch('/anbefalAndre', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Aserie, sender, motaker, kommentar })
+    });
+
+    const json = await res.json();
+    if (res.ok) {
+        alert('Anbefaling sendt');
+        e.target.reset();
+    } else {
+        alert('Feil: ' + (json.error || 'ukjent'));
+    }
+});
 
 // document.getElementById('anbefalForm')?.addEventListener('submit', async (e) => {
 //     e.preventDefault();

@@ -119,7 +119,11 @@ app.post('/opprettKonto', async (req, res) => { // Oppretter ny brukerkonto
     }
 });
 
-app.get("/api/dashbord",kreverInnlogging, (req, res) => {
+app.get("/api/dashbord/:id",kreverInnlogging, (req, res) => {
+    const params = new URLSearchParams(window.location.search); //hent noe fra søkefeltet
+    const id = params.get("id"); //hent id fra søkefeltet
+    if (!id) return console.warn("Ingen bruker-id i URL"); //! = mangler
+
     const brukerId = req.session.bruker.id;
     const bruker = db.prepare("SELECT id, brukernavn, navn, passord FROM bruker WHERE id = ?").get(brukerId);
     res.json({bruker});
@@ -139,7 +143,7 @@ app.post('/innlogget', async (req, res)=> { // Lar deg logge inn
     }
 
     req.session.bruker = { id: bruker.id, brukernavn: bruker.brukernavn };
-    return res.redirect("/beskyttet/dashbord.html");
+    return res.redirect(`/beskyttet/dashbord.html?id=${bruker.id}`);
 
 
     // req.session.bruker = { id: bruker.id, brukernavn: bruker.brukernavn };
